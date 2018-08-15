@@ -1,6 +1,6 @@
 // references
-`const express =  require('express');
-`const router = express.Router();
+const express =  require('express');
+const router = express.Router();
 const Car = require('../models/car');
 
 // GET: /cars
@@ -83,6 +83,28 @@ router.get('/edit/:_id', (req, res, next) => {
         }
     });
 });
+
+router.post('/edit/', (req, res, next) => {
+    Car.findById( req.body.id )
+    .then(function ( car ) {
+        car.make = req.body.make
+        car.model = req.body.model
+        car.year = req.body.year
+        car.mileage = req.body.mileage
+        car.colour =req.body.colour
+
+        car.save()
+        .then(  function () {
+          res.redirect( '/cars' )
+        })
+        .catch( function ( err ) {
+          next( err )
+        })
+      })
+    .catch(function ( err ) {
+      next( err )
+    })
+})
 
 // make public
 module.exports = router;
